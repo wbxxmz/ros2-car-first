@@ -36,4 +36,6 @@ source "${BINARY_SETUP}"
 source "${WORKSPACE_SETUP}"
 
 export ICAN_INSPECTION_WS="${WORKSPACE_DIR}"
+# Gazebo 材质/贴图搜索路径（world 里材质 URI 的兜底，避免路径失效导致贴图丢失）
+export GAZEBO_RESOURCE_PATH="${WORKSPACE_DIR}/binary_install/share/ican_inspection_sim:${GAZEBO_RESOURCE_PATH:-}"
 echo "已加载 ROS 2 Humble 和 iCAN 任务一巡检仿真工作区。"

@@ -391,8 +391,8 @@ class MinimalUserNode(Node):
             return
         self.hover(1.0)  # 稳定一下（不能用 sleep，会触发 cmd_timeout）
 
-        # 步骤2：飞到窗户1识别位（窗户1前方 1m 高）
-        if not self.fly_to(1.815, -0.3275, 1.0, 0.0):
+        # 步骤2：飞到窗户1识别位（窗框西面正前方 0.45m——识别图贴在框面上，不能贴框悬停）
+        if not self.fly_to(1.400, -0.3275, 1.0, 0.0):
             self.get_logger().warn("未到达窗户1识别位，继续后续流程。")
         self.hover(0.5)
 
@@ -402,8 +402,13 @@ class MinimalUserNode(Node):
         # 步骤4：窗户1识别图片发话术
         # TODO: 识别阶段实现——识别 window_target_1 的图片内容并喊话
 
-        # 步骤5：下降穿越窗户1（z=0.7m，在安全区间 [0.40, 1.15] 正中间）
-        if not self.fly_to(1.925, -0.3275, 0.7, 0.0):
+        # 步骤5：两步穿越窗户1——先对准，再水平直线穿越
+        # 5a 对准：飞到窗户1西侧 0.3m，降到穿越高度悬停，对准窗户中心
+        if not self.fly_to(1.625, -0.3275, 0.7, 0.0, pos_tol=0.08):
+            self.get_logger().warn("窗户1对准失败，继续后续流程。")
+        self.hover(0.5)
+        # 5b 穿越：保持高度水平直线穿过窗户，停在窗户东侧 0.4m（完全脱离窗框）
+        if not self.fly_to(2.325, -0.3275, 0.7, 0.0, pos_tol=0.08):
             self.get_logger().warn("穿越窗户1失败，继续后续流程。")
 
         # 步骤6：飞到空中点1
@@ -422,21 +427,31 @@ class MinimalUserNode(Node):
         # 步骤9：空中点2识别+灯光
         # TODO: 识别阶段实现——识别 + 开灯1-3秒 + 关灯
 
-        # 步骤10：飞到窗户2识别位
-        if not self.fly_to(2.035, -2.3725, 1.0, 0.0):
+        # 步骤10：飞到窗户2识别位（窗框东面正前方 0.45m）
+        if not self.fly_to(2.450, -2.3725, 1.0, 0.0):
             self.get_logger().warn("未到达窗户2识别位，继续后续流程。")
         self.hover(0.5)
 
-        # 步骤11：窗户2声明+识别+穿越
+        # 步骤11：窗户2声明+识别+两步穿越
         self.declare_event("window_2")
         # TODO: 识别阶段实现——识别 window_target_2 的图片内容并喊话
-        if not self.fly_to(1.925, -2.3725, 0.7, 0.0):
+        # 11a 对准：飞到窗户2东侧 0.3m，降到穿越高度悬停，对准窗户中心
+        if not self.fly_to(2.225, -2.3725, 0.7, 0.0, pos_tol=0.08):
+            self.get_logger().warn("窗户2对准失败，继续后续流程。")
+        self.hover(0.5)
+        # 11b 穿越：保持高度水平直线穿过窗户，停在窗户西侧 0.4m（完全脱离窗框）
+        if not self.fly_to(1.525, -2.3725, 0.7, 0.0, pos_tol=0.08):
             self.get_logger().warn("穿越窗户2失败，继续后续流程。")
 
-        # 步骤12：降落声明 → /referee/cruise_event: "landing_marker"
+        # 步骤12：飞回起点上方（指挥中心 0,0），避免在窗户2位置原地降落撞框
+        if not self.fly_to(0.0, 0.0, 1.0, 0.0):
+            self.get_logger().warn("未返回起点上方，继续降落流程。")
+        self.hover(0.5)
+
+        # 步骤13：降落声明 → /referee/cruise_event: "landing_marker"
         self.declare_event("landing_marker")
 
-        # 步骤13：降落
+        # 步骤14：降落（在起点上方垂直降）
         if not self.land():
             self.get_logger().error("降落失败。")
             return
