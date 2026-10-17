@@ -6,6 +6,9 @@ log/
 # 二进制预装包（43MB，从比赛方获取，不需要上传）
 binary_install/
 
+# 实验数据：识别采集样本、旧几何归档、模型备份（体积大、可重跑得到）
+data/
+
 # Python
 __pycache__/
 *.pyc

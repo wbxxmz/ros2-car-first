@@ -1,0 +1,24 @@
+{
+  "generated_at": "2026-10-09T12:02:42.827282+00:00",
+  "seed": 7,
+  "binary_package": "/home/yjh/下载/inspection_ws/binary_install/share/ican_inspection_sim",
+  "texture_directory": "/home/yjh/下载/inspection_ws/binary_install/share/ican_inspection_sim/materials/textures/point_targets",
+  "ground_type_assignment": {
+    "InspectionGroundTarget0": "trapped_people",
+    "InspectionGroundTarget1": "landslide",
+    "InspectionGroundTarget2": "damaged_vehicle",
+    "InspectionGroundTarget3": "collapsed_ruins",
+    "InspectionGroundTarget4": "rescue_camp"
+  },
+  "assignment": {
+    "InspectionGroundTarget0": "trapped_people_01.png",
+    "InspectionGroundTarget1": "landslide_02.jpg",
+    "InspectionGroundTarget2": "damaged_vehicle_01.png",
+    "InspectionGroundTarget3": "collapsed_ruins_01.png",
+    "InspectionGroundTarget4": "rescue_camp_01.png",
+    "InspectionAerialTarget1": "collapsed_ruins_02.jpg",
+    "InspectionAerialTarget2": "rescue_camp_02.jpg",
+    "InspectionWindowTarget1": "window_target_2.jpg",
+    "InspectionWindowTarget2": "window_bird_01.jpg"
+  }
+}

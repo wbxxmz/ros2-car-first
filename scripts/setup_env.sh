@@ -37,5 +37,7 @@ source "${WORKSPACE_SETUP}"
 
 export ICAN_INSPECTION_WS="${WORKSPACE_DIR}"
 # Gazebo 材质/贴图搜索路径（world 里材质 URI 的兜底，避免路径失效导致贴图丢失）
-export GAZEBO_RESOURCE_PATH="${WORKSPACE_DIR}/binary_install/share/ican_inspection_sim:${GAZEBO_RESOURCE_PATH:-}"
+# 注意：一旦设置该变量就会覆盖 Gazebo 内置默认路径，必须把自带的 /usr/share/gazebo-11
+# 一并带上，否则 RTShaderSystem 找不到 shader 库 → 相机传感器创建失败（/camera/image 消失）
+export GAZEBO_RESOURCE_PATH="/usr/share/gazebo-11:${WORKSPACE_DIR}/binary_install/share/ican_inspection_sim:${GAZEBO_RESOURCE_PATH:-}"
 echo "已加载 ROS 2 Humble 和 iCAN 任务一巡检仿真工作区。"

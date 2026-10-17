@@ -11,6 +11,18 @@ set +u
 source scripts/setup_env.sh
 set -u
 
+# 清理残留进程：上一轮任务的 Gazebo/Nav2 若还活着，同名节点会抢答
+# change_state 服务（旧 map_server 已 active，收到 configure 非法转换直接失败），
+# 导致 lifecycle_manager 报 "Failed to change state for node: map_server" 中止 bringup
+echo "[run_inspection_env] 清理残留的仿真/导航进程..."
+for pat in minimal_user_node gzserver gzclient rviz2 map_server amcl \
+           planner_server controller_server smoother_server behavior_server \
+           bt_navigator waypoint_follower lifecycle_manager static_transform_publisher \
+           "ros2 launch" "ros2 topic"; do
+  pkill -9 -f "$pat" 2>/dev/null || true
+done
+sleep 2
+
 SETUP_CMD="cd \"${WORKSPACE_DIR}\"; source \"${WORKSPACE_DIR}/scripts/setup_env.sh\""
 
 clean_terminal_env() {
